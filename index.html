@@ -19,7 +19,7 @@
 	function initMap(){
 		// Map Options
 		var options = {
-			zoom: 10,
+			zoom: 8,
 			center: {lat:38.0406,lng:-84.5037}
 		}
 
@@ -27,11 +27,75 @@
 		var map = new
 			google.maps.Map(document.getElementById('map'), options);
 
+			// Listen for click on map
+
+			google.maps.event.addListener(map, 'click', 
+				function(event){
+					addMarker({coords:event.latLng});
+			});
+
+/*
 		// Add Marker
 		var marker = new google.maps.Marker({
-			position: {lat:37.959322,lng:-84.500341},
-			map:map
+			position: {lat:37.959322,lng:-84.501341},
+			map:map,
+			icon:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
 		});
+
+		var infoWindow = new google.maps.InfoWindow({
+			content:'<h1>Veterans Park Elementary</h1>'
+		});
+
+		marker.addListener('click', function(){
+			infoWindow.open(map,marker);
+		});
+		*/
+
+		// Array Markers
+
+		var markers=[
+			{
+				coords:{lat:37.9593,lng:-84.5013},
+				iconImage:'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+				content: '<h1>Veterans Park Elementary</h1>'
+			},
+			{
+				coords:{lat:37.8806,lng:-84.5730},
+				content: '<h1>Nicholasville KY</h1>'
+			},
+			{
+				coords:{lat:37.9901,lng:-84.1797}
+			}
+		];
+
+		// Loop through markers
+		for(var i=0;i<markers.length;i++){
+			addMarker(markers[i]);	
+		}
+
+		
+		// Add Marker Function
+		function addMarker(props){
+			var marker = new google.maps.Marker({
+				position: props.coords,
+				map:map,
+				//icon: props.iconImage
+			});
+
+			if(props.iconImage){
+				marker.setIcon(props.iconImage);
+			}
+
+			if(props.content){
+				var infoWindow = new google.maps.InfoWindow({
+					content:props.content
+				});
+
+				marker.addListener('click', function(){
+					infoWindow.open(map,marker);
+				});
+			}
+		}
 	}
 </script>
 <script async defer
